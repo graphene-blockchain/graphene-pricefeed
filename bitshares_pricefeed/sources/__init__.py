@@ -41,4 +41,5 @@ from .biki import Biki
 from .goldprice import Goldprice
 from .currate import Currate
 from .yahoo import Yahoo
+from .currencygetgeoapi import Currencygetgeoapi
 

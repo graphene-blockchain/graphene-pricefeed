@@ -57,19 +57,29 @@ exchanges:
         #"AAPL:USD": #Apple Inc.
         #    - AAPL
 
-  currate:
-      klass: Currate
-      api_key: your_api_key
-      quotes:
-          - USD
-          - EUR
-          - RUB
-          - CNY
-      bases:
-          - USD
-          - EUR
-          - RUB
-          - CNY
+  #currate:
+  #    klass: Currate
+  #    api_key: your_api_key
+  #    quotes:
+  #        - USD
+  #        - EUR
+  #        - RUB
+  #        - CNY
+  #    bases:
+  #        - USD
+  #        - EUR
+  #        - RUB
+  #        - CNY
+
+  Currencygetgeoapi:
+    klass: Currencygetgeoapi
+    api_key: your_api_key
+    quotes:
+        - EUR
+        - RUB
+        - CNY
+    bases:
+        - USD
 
   ####################################
   # Fiat Exchange Rates
@@ -118,7 +128,6 @@ exchanges:
           - BTC
           - EOS
           - LTC
-          - BTS
           - TRX
           - USDT
           - EUR
@@ -153,7 +162,6 @@ exchanges:
       - RUDEX.USDT
       - RUDEX.EOS
       - RUDEX.LTC
-      - RUDEX.BTS
       - RUDEX.TRX
       - RUDEX.BTC
       #- USD
@@ -161,7 +169,6 @@ exchanges:
         RUDEX.USDT: USDT
         RUDEX.EOS: EOS
         RUDEX.LTC: LTC
-        RUDEX.BTS: BTS
         RUDEX.TRX: TRX
         RUDEX.BTC: BTC
 
@@ -313,7 +320,6 @@ intermediate_assets:
     - EUR
     - CNY
     - USDT
-    - BTS
     - EOS
     - LTC
     - TRX
