@@ -30,6 +30,7 @@ exchanges:
   # Yahoo: Fiat + Commodities + Crypto + Stocks
   ####################################
   yahoo:
+    enable: false
     klass: Yahoo
     quotes:
         - USD
@@ -72,6 +73,7 @@ exchanges:
   #        - CNY
 
   Currencygetgeoapi:
+    enable: false
     klass: Currencygetgeoapi
     api_key: your_api_key
     quotes:
@@ -189,6 +191,7 @@ exchanges:
   # GOLD and SILVER
   ####################################
   goldprice:
+      enable: false
       klass: Goldprice
       quotes:
           - XAU
@@ -219,6 +222,51 @@ exchanges:
 
 
 
+
+
+  swissquote:
+    klass: Swissquote
+    timeout: 20
+    bases:
+      - USD
+    quotes:
+      - XAU
+      - XAG
+    aliases:
+      XAU: GOLD
+      XAG: SILVER
+  goldapicom:
+    klass: GoldApiCom
+    timeout: 20
+    bases:
+      - USD
+    quotes:
+      - XAU
+      - XAG
+    aliases:
+      XAU: GOLD
+      XAG: SILVER
+  frankfurter:
+    klass: Frankfurter
+    timeout: 20
+    bases:
+      - USD
+    quotes:
+      - CNY
+  fawazahmed:
+    klass: Fawazahmed
+    timeout: 20
+    bases:
+      - USD
+    quotes:
+      - CNY
+  openerapi:
+    klass: OpenErApi
+    timeout: 20
+    bases:
+      - USD
+    quotes:
+      - CNY
 
 # default settings
 default:

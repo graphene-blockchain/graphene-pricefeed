@@ -42,4 +42,8 @@ from .goldprice import Goldprice
 from .currate import Currate
 from .yahoo import Yahoo
 from .currencygetgeoapi import Currencygetgeoapi
-
+from .swissquote import Swissquote
+from .goldapicom import GoldApiCom
+from .frankfurter import Frankfurter
+from .fawazahmed import Fawazahmed
+from .openerapi import OpenErApi

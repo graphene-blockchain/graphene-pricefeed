@@ -5,7 +5,7 @@ import click
 import os
 import logging
 from pprint import pprint
-from bitshares.price import Price
+from .feed_price import feed_price
 from bitshares.account import Account
 # from bitshares.asset import Asset
 from .pricefeed import Feed
@@ -238,14 +238,14 @@ def update(ctx, assets, dry_run, confirm_warning, skip_critical):
         # Prices are denoted in `base`/`quote`. For a bitUSD feed, we
         # want something like    0.05 USD per BTS. This makes "USD" the
         # `base` and BTS the `quote`.
-        settlement_price = Price(
+        settlement_price = feed_price(
             price["price"],
-            base=symbol,
-            quote=price["short_backing_symbol"])
-        cer = Price(
+            symbol,
+            price["short_backing_symbol"])
+        cer = feed_price(
             price["cer"],
-            base=symbol,
-            quote=price["short_backing_symbol"])
+            symbol,
+            price["short_backing_symbol"])
         ctx.bitshares.publish_price_feed(
             symbol,
             settlement_price=settlement_price,

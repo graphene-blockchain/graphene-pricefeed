@@ -83,6 +83,85 @@ ACTIVE_KEY="XXXXXXXXXXXXXXXX"
 0,15,30,45 * * * * docker run -v /path/to/config.yaml:/config/config.yaml graphene-pricefeed update --skip-critical --active-key=$ACTIVE_KEY
 ```
 
+
+## CNY, GOLD and SILVER
+
+Update this repository, then add these sources to the `exchanges:` section of the config you already use. No API key is required.
+
+```yaml
+  swissquote:
+    klass: Swissquote
+    timeout: 20
+    bases:
+      - USD
+    quotes:
+      - XAU
+      - XAG
+    aliases:
+      XAU: GOLD
+      XAG: SILVER
+  goldapicom:
+    klass: GoldApiCom
+    timeout: 20
+    bases:
+      - USD
+    quotes:
+      - XAU
+      - XAG
+    aliases:
+      XAU: GOLD
+      XAG: SILVER
+  frankfurter:
+    klass: Frankfurter
+    timeout: 20
+    bases:
+      - USD
+    quotes:
+      - CNY
+  fawazahmed:
+    klass: Fawazahmed
+    timeout: 20
+    bases:
+      - USD
+    quotes:
+      - CNY
+  openerapi:
+    klass: OpenErApi
+    timeout: 20
+    bases:
+      - USD
+    quotes:
+      - CNY
+```
+
+In that same config set `enable: false` for `yahoo`, `Currencygetgeoapi` and `goldprice`. Leave `bitstamp`, `binance` and `graphene` enabled. The route to GPH is asset to USD, USD to BTC, BTC to USDT, USDT to GPH.
+
+Under `assets:` keep:
+
+```yaml
+assets:
+  USD:
+  EUR:
+  RUB:
+  CNY:
+  GOLD:
+  SILVER:
+```
+
+Use `python-bitshares` from https://github.com/graphene-blockchain/python-bitshares. That library already knows the GPH chain. Do not put a chain id into this repository.
+
+The first publication of an asset has an infinite price change. Run once by hand, without `--skip-critical`, and answer `y` each time the script asks:
+
+```
+graphene-pricefeed --configfile config.yml update
+```
+
+The script goes through every asset in the config. Assets you already publish are left alone when the price has not moved enough.
+
+The schedule stays as in the cron section above: `--skip-critical`, and without `--no-skip-critical`. `--no-confirm-warning` only skips the question.
+
+GOLD and SILVER are stored as 1 unit of metal against a large amount of GPH. The printed table can show `0.000000`. Read the feed from the chain.
+
 ## Help
 
 ```
