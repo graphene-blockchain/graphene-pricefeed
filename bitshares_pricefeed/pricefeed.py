@@ -416,6 +416,55 @@ class Feed(object):
                                     ]
                                 )
 
+    def derive4Markets(self, base_symbol, target_symbol, apply_volume_limit=False):
+        """Price via 4 markets: GOLD:USD -> USD:BTC -> BTC:USDT -> USDT:GPH.
+
+        The last hop into GPH is only USDT. That is the live RUDEX book.
+        """
+        if "intermediate_assets" not in self.config or not self.config["intermediate_assets"]:
+            return
+        if target_symbol in self.data.get(base_symbol, {}):
+            return
+        mids = self.config["intermediate_assets"]
+        for inter_c in mids:
+            for inter_b in mids:
+                for inter_a in mids:
+                    if target_symbol == "GPH" and inter_a != "USDT":
+                        continue
+                    if len({base_symbol, inter_c, inter_b, inter_a, target_symbol}) < 5:
+                        continue
+                    if inter_c not in self.data.get(base_symbol, {}):
+                        continue
+                    if inter_b not in self.data.get(inter_c, {}):
+                        continue
+                    if inter_a not in self.data.get(inter_b, {}):
+                        continue
+                    if target_symbol not in self.data.get(inter_a, {}):
+                        continue
+                    for ratio_c in self.data[base_symbol][inter_c]:
+                        for ratio_b in self.data[inter_c][inter_b]:
+                            for ratio_a in self.data[inter_b][inter_a]:
+                                for last in self.data[inter_a][target_symbol]:
+                                    if last["volume"] == 0:
+                                        continue
+                                    price = float(
+                                        last["price"] * ratio_a["price"] * ratio_b["price"] * ratio_c["price"]
+                                    )
+                                    if not price > 0:
+                                        continue
+                                    self.addPrice(
+                                        base_symbol,
+                                        target_symbol,
+                                        price,
+                                        float(last["volume"]),
+                                        sources=[
+                                            ratio_c["sources"],
+                                            ratio_b["sources"],
+                                            ratio_a["sources"],
+                                            last["sources"],
+                                        ],
+                                    )
+
     def get_premium_details(self, smartcoin_symbol, realcoin_symbol, dex_price):
         details = {
             "dex_price": dex_price
@@ -577,6 +626,8 @@ class Feed(object):
             apply_volume_limit = True
         self.derive2Markets(symbol, backing_symbol, apply_volume_limit=apply_volume_limit)
         self.derive3Markets(symbol, backing_symbol, apply_volume_limit=apply_volume_limit)
+        if backing_symbol not in self.data.get(symbol, {}):
+            self.derive4Markets(symbol, backing_symbol, apply_volume_limit=apply_volume_limit)
         log.info("Computed data (after derivation): \n{}".format(self.data))
 
         if symbol not in self.data:
